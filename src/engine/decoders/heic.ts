@@ -21,9 +21,11 @@ function loadLibheif(): Promise<{ lib: LibHeif }> {
     const wasmBinary = await response.arrayBuffer();
     // On renvoie un objet enveloppe : le module Emscripten ne doit pas être « await-é » directement.
     return new Promise<{ lib: LibHeif }>((resolve, reject) => {
+      // Avec `wasmBinary`, l'initialisation peut être synchrone : `lib` n'est pas encore
+      // affecté quand le rappel s'exécute, d'où la micro-tâche.
       const lib = factory({
         wasmBinary,
-        onRuntimeInitialized: () => resolve({ lib }),
+        onRuntimeInitialized: () => queueMicrotask(() => resolve({ lib })),
         onAbort: reject,
         print: () => undefined,
         printErr: () => undefined,
@@ -74,7 +76,9 @@ export async function decodeHeic(
   if (!context) throw new ConversionError('out-of-memory');
   try {
     const error = lib.heif_context_read_from_memory(context, bytes);
-    if (error.code !== 0) throw new ConversionError('corrupt', error.message);
+    // `code` est une valeur d'énumération Embind : on la compare à la constante, pas à 0.
+    if (error.code !== lib.heif_error_code.heif_error_Ok)
+      throw new ConversionError('corrupt', error.message);
     const handle = lib.heif_js_context_get_primary_image_handle(context);
     if (!handle || handle.code) throw new ConversionError('corrupt', 'image principale absente');
     const heifImage = new lib.HeifImage(handle);

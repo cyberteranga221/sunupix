@@ -1,7 +1,7 @@
 // Déclarations minimales pour libheif-js (seules les fonctions utilisées par SunuPix).
 declare module 'libheif-js/libheif-wasm/libheif.js' {
   export interface HeifError {
-    code: number;
+    code: unknown;
     message: string;
   }
   export interface HeifImage {
@@ -18,6 +18,7 @@ declare module 'libheif-js/libheif-wasm/libheif.js' {
     heif_js_context_get_primary_image_handle(context: unknown): (object & { code?: number }) | null;
     HeifImage: new (handle: unknown) => HeifImage;
     HEAPU8: Uint8Array;
+    heif_error_code: { heif_error_Ok: unknown };
   }
   export interface LibHeifOptions {
     wasmBinary: ArrayBuffer;
