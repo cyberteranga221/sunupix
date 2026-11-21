@@ -25,6 +25,8 @@ export type ErrorCode =
   | 'out-of-memory'
   | 'canvas-too-large'
   | 'encode-unsupported'
+  | 'decoder-unavailable'
+  | 'save-failed'
   | 'unknown';
 
 /** Avertissements non bloquants affichés sur la ligne du fichier. */
@@ -41,3 +43,21 @@ export const EXTENSION: Record<OutputFormat, string> = {
   png: 'png',
   webp: 'webp',
 };
+
+/** Travail envoyé à un worker. */
+export interface ConvertJob {
+  file: Blob;
+  inputFormat: InputFormat;
+  options: ConvertOptions;
+  /** Surface de canvas maximale autorisée sur cet appareil. */
+  maxArea: number;
+}
+
+export interface ConvertOutput {
+  blob: Blob;
+  width: number;
+  height: number;
+  /** Miniature JPEG légère (≈ 96 px), ou null. */
+  thumbnail: Blob | null;
+  warnings: WarningCode[];
+}

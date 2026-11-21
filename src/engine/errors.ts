@@ -44,6 +44,8 @@ const CODES: readonly ErrorCode[] = [
   'out-of-memory',
   'canvas-too-large',
   'encode-unsupported',
+  'decoder-unavailable',
+  'save-failed',
   'unknown',
 ];
 
