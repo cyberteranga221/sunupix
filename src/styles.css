@@ -18,6 +18,20 @@
     ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
+/* Couleurs sémantiques (claires/sombres) exposées comme classes Tailwind : bg-surface, text-muted… */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--border);
+  --color-fg: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--accent-text);
+  --color-warn: var(--warn);
+  --color-danger: var(--danger);
+}
+
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
 :root {
@@ -74,4 +88,78 @@ body {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Bande tricolore discrète (vert, jaune, rouge). */
+.flag-stripe {
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--color-brand-500) 0 33.33%,
+    var(--color-sun-400) 33.33% 66.66%,
+    var(--color-flag-red) 66.66% 100%
+  );
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.25s ease-out both;
+}
+
+@keyframes indeterminate {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+
+.animate-indeterminate {
+  animation: indeterminate 1.2s ease-in-out infinite;
+}
+
+/* Boutons partagés. */
+@utility btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  border-radius: 9999px;
+  padding-inline: 1.25rem;
+  font-weight: 500;
+  transition:
+    filter 0.15s,
+    background-color 0.15s,
+    transform 0.1s;
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+@utility btn-primary {
+  @apply btn-base bg-accent text-on-accent shadow-sm hover:brightness-110;
+}
+
+@utility btn-secondary {
+  @apply btn-base border-line bg-surface hover:bg-surface-2 border;
+}
+
+@utility btn-ghost {
+  @apply btn-base text-muted hover:bg-surface-2 hover:text-fg min-h-9 px-3;
 }
