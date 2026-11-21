@@ -30,35 +30,38 @@
   --color-on-accent: var(--accent-text);
   --color-warn: var(--warn);
   --color-danger: var(--danger);
+  --shadow-card: var(--shadow-card);
 }
 
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
 :root {
-  --bg: #f7f7f5;
+  --bg: #f6f6f3;
   --surface: #ffffff;
-  --surface-2: #f1f1ee;
-  --border: #e3e3de;
-  --text: #16181a;
-  --muted: #5b6066;
-  --accent: var(--color-brand-600);
+  --surface-2: #f0f0ec;
+  --border: #e2e2dc;
+  --text: #14161a;
+  --muted: #5a6068;
+  --accent: #0b6e3f;
   --accent-text: #ffffff;
   --warn: #8a5300;
   --danger: #b4141b;
+  --shadow-card: 0 1px 0 rgb(20 22 26 / 0.04), 0 24px 48px -24px rgb(20 22 26 / 0.22);
   color-scheme: light;
 }
 
 [data-theme='dark'] {
-  --bg: #0b0d0c;
-  --surface: #141716;
-  --surface-2: #1c201e;
-  --border: #2a2f2c;
+  --bg: #0e1110;
+  --surface: #161a18;
+  --surface-2: #1e2320;
+  --border: #2b312d;
   --text: #eef0ee;
-  --muted: #a3aaa5;
-  --accent: #3ccf7e;
-  --accent-text: #04150b;
+  --muted: #a1a8a3;
+  --accent: #4cc38a;
+  --accent-text: #06140c;
   --warn: #f3c94d;
   --danger: #ff7b7f;
+  --shadow-card: 0 0 0 1px rgb(255 255 255 / 0.02), 0 24px 48px -24px rgb(0 0 0 / 0.7);
   color-scheme: dark;
 }
 
@@ -157,9 +160,33 @@ body {
 }
 
 @utility btn-secondary {
-  @apply btn-base border-line bg-surface hover:bg-surface-2 border;
+  @apply btn-base border border-line bg-surface hover:bg-surface-2;
 }
 
 @utility btn-ghost {
-  @apply btn-base text-muted hover:bg-surface-2 hover:text-fg min-h-9 px-3;
+  @apply btn-base min-h-9 px-3 text-muted hover:bg-surface-2 hover:text-fg;
+}
+
+/* Changement d'extension dans l'accroche : un seul mouvement, au changement de format. */
+@keyframes ext-swap {
+  from {
+    opacity: 0;
+    transform: translateY(0.35em);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+.animate-ext-swap {
+  display: inline-block;
+  animation: ext-swap 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* Disclosure native : on masque le triangle par défaut. */
+summary::-webkit-details-marker {
+  display: none;
 }

@@ -31,7 +31,7 @@ export function FileList({ items }: { items: readonly BatchItem[] }) {
   return (
     <div
       ref={parent}
-      className="border-line bg-surface max-h-[28rem] overflow-y-auto overscroll-contain rounded-2xl border"
+      className="max-h-[28rem] overflow-y-auto overscroll-contain rounded-2xl border border-line bg-surface"
       role="list"
       aria-label={t.list.title(items.length)}
       data-testid="file-list"
@@ -79,10 +79,10 @@ const Row = memo(function Row({ item }: { item: BatchItem }) {
 
   return (
     <div
-      className="border-line/60 flex h-full items-center gap-3 border-b px-3 sm:px-4"
+      className="flex h-full items-center gap-3 border-b border-line/60 px-3 sm:px-4"
       data-status={item.status}
     >
-      <div className="bg-surface-2 relative size-12 shrink-0 overflow-hidden rounded-lg">
+      <div className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-surface-2">
         {item.thumbUrl ? (
           <img
             src={item.thumbUrl}
@@ -92,13 +92,13 @@ const Row = memo(function Row({ item }: { item: BatchItem }) {
             loading="lazy"
           />
         ) : (
-          <span className="text-muted flex size-full items-center justify-center text-[10px] font-semibold uppercase">
+          <span className="flex size-full items-center justify-center text-[10px] font-semibold text-muted uppercase">
             {item.format ?? '?'}
           </span>
         )}
         {item.status === 'processing' && (
-          <span className="bg-accent/20 absolute inset-x-0 bottom-0 h-1 overflow-hidden">
-            <span className="animate-indeterminate bg-accent block h-full w-2/5" />
+          <span className="absolute inset-x-0 bottom-0 h-1 overflow-hidden bg-accent/20">
+            <span className="animate-indeterminate block h-full w-2/5 bg-accent" />
           </span>
         )}
       </div>
@@ -132,7 +132,7 @@ const Row = memo(function Row({ item }: { item: BatchItem }) {
           <RowButton label={t.actions.retry} icon="retry" onClick={() => store.retry(item.id)} />
         )}
         {item.status === 'done' && !item.output && item.saved && (
-          <span className="text-accent p-2" aria-hidden="true">
+          <span className="p-2 text-accent" aria-hidden="true">
             <Icon name="check" />
           </span>
         )}
@@ -161,7 +161,7 @@ function RowButton({
       onClick={onClick}
       aria-label={label}
       title={label}
-      className="text-muted hover:bg-surface-2 hover:text-fg inline-flex size-10 items-center justify-center rounded-full transition"
+      className="inline-flex size-10 items-center justify-center rounded-full text-muted transition hover:bg-surface-2 hover:text-fg"
     >
       <Icon name={icon} className="size-[18px]" />
     </button>

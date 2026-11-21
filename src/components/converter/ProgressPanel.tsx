@@ -22,7 +22,7 @@ export function ProgressPanel({ snapshot }: { snapshot: BatchSnapshot }) {
 
   return (
     <div
-      className="animate-fade-in border-line bg-surface space-y-3 rounded-2xl border p-4"
+      className="animate-fade-in space-y-3 rounded-2xl border border-line bg-surface p-4"
       data-testid="progress"
     >
       <div className="flex flex-wrap items-baseline justify-between gap-2 text-sm">
@@ -39,10 +39,10 @@ export function ProgressPanel({ snapshot }: { snapshot: BatchSnapshot }) {
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={percent}
-        className="bg-surface-2 h-2 overflow-hidden rounded-full"
+        className="h-2 overflow-hidden rounded-full bg-surface-2"
       >
         <div
-          className="bg-accent h-full rounded-full transition-[width] duration-300"
+          className="h-full rounded-full bg-accent transition-[width] duration-300"
           style={{ width: `${percent}%` }}
         />
       </div>

@@ -23,18 +23,21 @@ export const en: Dictionary = {
     switchLanguageLabel: 'Passer en français',
   },
   hero: {
-    title: 'Convert your iPhone photos to JPG or PNG',
+    title: 'Convert your iPhone photos to JPG or PNG.',
     subtitle:
-      'Free, no sign-up and no upload: your photos stay on your device. Up to 400 photos at once.',
-    badgePrivate: '100% private',
-    badgeFree: 'Free',
-    badgeOffline: 'Works offline',
+      'Free, no upload. Up to 400 photos at once, converted right in your browser: they never leave your device.',
+    sampleName: 'IMG_4821',
+    facts: [
+      'No photo sent over the Internet',
+      'Up to 400 photos per batch',
+      'Free, no account, no watermark',
+    ],
   },
   steps: {
     label: 'Steps',
-    choose: 'Pick your photos',
-    format: 'Pick the format',
-    download: 'Download',
+    choose: 'Your photos',
+    format: 'Output format',
+    download: 'Convert and download',
   },
   dropzone: {
     title: 'Drop your photos here',
@@ -50,10 +53,18 @@ export const en: Dictionary = {
   options: {
     title: 'Settings',
     format: 'Output format',
-    formatJpegHint: 'Most compatible, small files',
-    formatPngHint: 'Lossless, large files',
-    formatWebpHint: 'Modern and light',
-    webpUnsupported: 'Your browser cannot create WebP (Safari). Choose JPG or PNG.',
+    formatJpegHint: 'Works everywhere',
+    formatPngHint: 'Lossless, heavier',
+    formatWebpHint: 'Light, for the web',
+    recommended: 'Recommended',
+    advanced: 'Advanced settings',
+    summaryQuality: (n: number) => `Quality ${n}%`,
+    summaryMetadata: {
+      strip: 'metadata removed',
+      'keep-no-gps': 'metadata without GPS',
+      keep: 'all metadata',
+    },
+    webpUnsupported: 'Not available on Safari',
     quality: 'Quality',
     qualityHint: 'Between 80 and 92%, the difference is invisible and files are smaller.',
     resize: 'Size',
@@ -77,7 +88,9 @@ export const en: Dictionary = {
     destinationFolderHint: 'Each photo is written as soon as it is ready. Ideal for 400 photos.',
   },
   actions: {
-    convert: (n: number) => (n > 1 ? `Convert ${n} photos` : 'Convert the photo'),
+    convert: (n: number, format: string) =>
+      n > 1 ? `Convert ${n} photos to ${format}` : `Convert the photo to ${format}`,
+    convertEmpty: 'Add photos to get started',
     reconvert: 'Convert again with these settings',
     pause: 'Pause',
     resume: 'Resume',
@@ -87,7 +100,7 @@ export const en: Dictionary = {
     remove: 'Remove',
     cancel: 'Cancel',
     download: 'Download',
-    downloadAll: 'Download all as ZIP',
+    downloadAll: 'Download the ZIP',
     downloadPart: (i: number, total: number) => `ZIP ${i} of ${total}`,
     preparingZip: 'Preparing ZIP…',
   },
@@ -141,6 +154,54 @@ export const en: Dictionary = {
     lowMemory:
       'Your device seems short on memory. For a large batch, convert 100 photos at a time and download as you go.',
     privacy: 'Your photos never leave your device.',
+  },
+  home: {
+    howTitle: 'How it works',
+    how: [
+      {
+        title: 'Add your photos',
+        text: 'Drop a whole folder from your computer, or pick photos from your phone’s gallery.',
+      },
+      {
+        title: 'Pick the format',
+        text: 'JPG to share anywhere, PNG to keep every pixel. Your settings are remembered for next time.',
+      },
+      {
+        title: 'Download',
+        text: 'One ZIP to get everything at once, split automatically for large batches. On Chrome and Edge, save straight into a folder.',
+      },
+    ],
+    privacyTitle: 'Your photos stay with you',
+    privacyText:
+      'Most online converters upload your photos to their servers. SunuPix does all the work in your browser, on your own device. Nobody else sees your pictures.',
+    privacyPoints: [
+      'Local conversion, no server, no online storage',
+      'GPS location and other metadata removed by default',
+      'Open source code anyone can check',
+    ],
+    faqTitle: 'Frequently asked questions',
+    faq: [
+      {
+        q: 'What is a HEIC file?',
+        a: 'It is the default photo format on iPhone. It takes less space than JPG, but many computers, websites and apps cannot open it. SunuPix converts it to JPG or PNG, readable everywhere.',
+      },
+      {
+        q: 'Is it really free?',
+        a: 'Yes. No account, no hidden limit, no watermark. SunuPix is free software under the MIT licence.',
+      },
+      {
+        q: 'Is my photo quality preserved?',
+        a: 'Yes. At 90% JPG quality, the difference from the original is invisible to the naked eye. Choose PNG for a fully lossless conversion.',
+      },
+      {
+        q: 'Does it work on a phone?',
+        a: 'Yes, on iPhone and Android. On iPhone, very large photos (48 MP) are automatically reduced to about 16 MP, because Safari limits the size of images it can process.',
+      },
+    ],
+  },
+  footer: {
+    tagline: 'Free and open image converter, designed for Senegal and West Africa.',
+    license: 'Open source · MIT licence',
   },
   units: {
     bytes: ['B', 'KB', 'MB', 'GB'],

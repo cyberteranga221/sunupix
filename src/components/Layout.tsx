@@ -1,45 +1,44 @@
 import type { ReactNode } from 'react';
-import { Link, NavLink } from 'react-router';
+import { Link } from 'react-router';
 import { APP } from '../config';
 import { useI18n } from '../i18n';
+import { Icon } from './Icon';
 import { Logo } from './Logo';
 import { ThemeToggle } from './ThemeToggle';
 
 export function Layout({ children }: { children: ReactNode }) {
   const { t, lang, setLang } = useI18n();
-  const navClass = ({ isActive }: { isActive: boolean }) =>
-    `rounded-full px-3 py-2 text-sm transition hover:text-fg ${isActive ? 'text-fg font-medium' : 'text-muted'}`;
 
   return (
     <div className="flex min-h-dvh flex-col">
       <a
         href="#contenu"
-        className="bg-accent text-on-accent sr-only z-50 rounded-lg px-4 py-2 focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+        className="sr-only z-50 rounded-lg bg-accent px-4 py-2 text-on-accent focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
       >
         {t.common.skipToContent}
       </a>
       <div className="flag-stripe" aria-hidden="true" />
-      <header className="border-line/70 bg-bg/80 sticky top-0 z-40 border-b backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-6xl items-center gap-2 px-4 sm:px-6">
+      <header className="sticky top-0 z-40 border-b border-line/70 bg-bg/80 backdrop-blur-md backdrop-saturate-150">
+        <div className="mx-auto flex h-16 max-w-6xl items-center gap-1 px-4 sm:px-6">
           <Link
             to="/"
             className="mr-auto flex items-center gap-2.5 rounded-lg font-semibold tracking-tight"
           >
-            <Logo />
-            <span className="text-lg">{APP.name}</span>
+            <Logo className="size-7" />
+            <span className="text-[17px]">{APP.name}</span>
           </Link>
-          <nav aria-label={t.nav.menu} className="hidden items-center sm:flex">
-            <NavLink to="/faq" className={navClass}>
-              {t.nav.faq}
-            </NavLink>
-            <NavLink to="/a-propos" className={navClass}>
-              {t.nav.about}
-            </NavLink>
-          </nav>
+          <a
+            href={APP.repoUrl}
+            rel="noopener"
+            className="hidden items-center gap-2 rounded-full px-3 py-2 text-sm text-muted transition hover:bg-surface-2 hover:text-fg sm:inline-flex"
+          >
+            <Icon name="github" className="size-4" />
+            GitHub
+          </a>
           <button
             type="button"
             onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
-            className="text-muted hover:bg-surface-2 hover:text-fg rounded-full px-3 py-2 text-sm font-medium transition"
+            className="inline-flex h-10 items-center rounded-full px-3 font-mono text-sm font-medium text-muted transition hover:bg-surface-2 hover:text-fg"
             aria-label={t.nav.switchLanguageLabel}
             lang={lang === 'fr' ? 'en' : 'fr'}
           >
@@ -51,28 +50,23 @@ export function Layout({ children }: { children: ReactNode }) {
       <main id="contenu" className="flex-1">
         {children}
       </main>
-      <footer className="border-line/70 border-t">
-        <div className="text-muted mx-auto flex max-w-6xl flex-col gap-4 px-4 py-8 text-sm sm:flex-row sm:items-center sm:px-6">
-          <p className="mr-auto">
-            {APP.name} · {t.notices.privacy}
-          </p>
-          <nav aria-label="Liens" className="flex flex-wrap gap-x-5 gap-y-2">
-            <Link to="/faq" className="hover:text-fg">
-              {t.nav.faq}
-            </Link>
-            <Link to="/confidentialite" className="hover:text-fg">
-              {t.nav.privacy}
-            </Link>
-            <Link to="/a-propos" className="hover:text-fg">
-              {t.nav.about}
-            </Link>
-            <Link to="/contact" className="hover:text-fg">
-              {t.nav.contact}
-            </Link>
-            <a href={APP.repoUrl} className="hover:text-fg" rel="noopener">
-              GitHub
-            </a>
-          </nav>
+      <footer className="border-t border-line/70">
+        <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 text-sm text-muted sm:flex-row sm:items-start sm:justify-between sm:px-6">
+          <div className="max-w-sm space-y-2">
+            <p className="flex items-center gap-2 font-semibold text-fg">
+              <Logo className="size-5" />
+              {APP.name}
+            </p>
+            <p className="leading-relaxed">{t.footer.tagline}</p>
+          </div>
+          <a
+            href={APP.repoUrl}
+            rel="noopener"
+            className="inline-flex items-center gap-2 hover:text-fg"
+          >
+            <Icon name="github" className="size-4" />
+            {t.footer.license}
+          </a>
         </div>
       </footer>
     </div>

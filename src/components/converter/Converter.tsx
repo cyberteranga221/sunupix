@@ -1,43 +1,45 @@
-import { useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { LIMITS } from '../../config';
 import { isLowMemory } from '../../engine/device';
 import { pickDirectory, supportsDirectoryPicker } from '../../engine/save';
-import type { ConvertOptions, OutputFormat } from '../../engine/types';
+import type { OutputFormat } from '../../engine/types';
 import { useHydrated } from '../../hooks/useHydrated';
 import { useT } from '../../i18n';
 import { getBatchStore } from '../../state/batch';
-import { DEFAULT_OPTIONS, loadOptions, saveOptions } from '../../state/options';
+import { canEncodeWebp, getOptions, setOptions } from '../../state/options';
 import { useBatch } from '../../state/useBatch';
+import { useOptions } from '../../state/useOptions';
 import { Icon } from '../Icon';
+import { AdvancedOptions, type Destination } from './AdvancedOptions';
 import { DownloadPanel } from './DownloadPanel';
 import { Dropzone } from './Dropzone';
 import { FileList } from './FileList';
-import { OptionsPanel, type Destination } from './OptionsPanel';
+import { FormatPicker } from './FormatPicker';
 import { ProgressPanel } from './ProgressPanel';
-import { Steps } from './Steps';
 
-/** Le navigateur sait-il encoder du WebP ? (Safari : non.) */
-function canEncodeWebp(): boolean {
-  try {
-    const canvas = document.createElement('canvas');
-    canvas.width = canvas.height = 1;
-    return canvas.toDataURL('image/webp').startsWith('data:image/webp');
-  } catch {
-    return false;
-  }
-}
+const FORMAT_LABEL: Record<OutputFormat, string> = { jpeg: 'JPG', png: 'PNG', webp: 'WebP' };
 
 interface Props {
   /** Format imposé par une page dédiée (« HEIC en PNG »…). */
   presetFormat?: OutputFormat;
 }
 
+/**
+ * Le convertisseur, en trois étapes visibles et numérotées :
+ * 1. tes photos → 2. format de sortie → 3. convertis et télécharge.
+ */
 export function Converter({ presetFormat }: Props) {
   const t = useT();
   const snapshot = useBatch();
+  const options = useOptions();
   const hydrated = useHydrated();
   const [destination, setDestination] = useState<Destination>('zip');
-  const [userOptions, setUserOptions] = useState<ConvertOptions | null>(null);
+
+  // Page dédiée : on impose son format au chargement (c'est un système externe, pas un état React).
+  useEffect(() => {
+    if (presetFormat && getOptions().format !== presetFormat)
+      setOptions({ ...getOptions(), format: presetFormat });
+  }, [presetFormat]);
 
   // Capacités du navigateur, lues seulement après l'hydratation (le pré-rendu n'a pas de navigateur).
   const capabilities = useMemo(
@@ -52,26 +54,12 @@ export function Converter({ presetFormat }: Props) {
     [hydrated],
   );
 
-  // Réglages mémorisés de la visite précédente (le format d'une page dédiée est prioritaire).
-  const initialOptions = useMemo<ConvertOptions>(() => {
-    const saved = hydrated ? loadOptions() : DEFAULT_OPTIONS;
-    const format =
-      presetFormat ?? (saved.format === 'webp' && !capabilities.webp ? 'jpeg' : saved.format);
-    return { ...saved, format };
-  }, [hydrated, presetFormat, capabilities.webp]);
-  const options = userOptions ?? initialOptions;
-
-  const updateOptions = (next: ConvertOptions) => {
-    setUserOptions(next);
-    saveOptions(next);
-  };
-
   const { items, running } = snapshot;
-  const store = typeof window === 'undefined' ? null : getBatchStore();
+  const store = hydrated ? getBatchStore() : null;
   const pending = items.filter((i) => i.status === 'pending' || i.status === 'cancelled').length;
   const convertible = items.filter((i) => i.format !== null && i.error !== 'too-large').length;
   const hasFinished = items.some((i) => i.status === 'done' || i.status === 'error');
-  const step: 1 | 2 | 3 =
+  const current: 1 | 2 | 3 =
     items.length === 0 ? 1 : running || (hasFinished && pending === 0) ? 3 : 2;
 
   const start = async (reconvertAll: boolean) => {
@@ -86,109 +74,157 @@ export function Converter({ presetFormat }: Props) {
 
   return (
     <section
-      aria-labelledby="convertisseur"
-      className="border-line bg-surface rounded-3xl border p-4 shadow-sm sm:p-6"
+      aria-label={t.nav.home}
+      className="rounded-[28px] border border-line bg-surface p-4 shadow-card sm:p-6"
+      data-testid="converter"
     >
-      <h2 id="convertisseur" className="sr-only">
-        {t.nav.home}
-      </h2>
-      <Steps current={step} />
-      {/* Mobile : ajout → réglages → progression → liste. Ordinateur : réglages à droite. */}
-      <div className="mt-5 grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
-        <div className="min-w-0 space-y-4 lg:col-start-1">
-          <Dropzone onFiles={(files) => void store?.addFiles(files)} compact={items.length > 0} />
+      <ol className="space-y-1">
+        <Step n={1} title={t.steps.choose} current={current}>
+          <div className="space-y-3">
+            <Dropzone onFiles={(files) => void store?.addFiles(files)} compact={items.length > 0} />
+            {snapshot.overflow > 0 && (
+              <Notice onClose={() => store?.dismissOverflow()}>
+                {t.notices.overflow(snapshot.overflow, LIMITS.maxFiles)}
+              </Notice>
+            )}
+            {capabilities.lowMemory && items.length > 100 && destination === 'zip' && (
+              <Notice>{t.notices.lowMemory}</Notice>
+            )}
+          </div>
+        </Step>
 
-          {snapshot.overflow > 0 && (
-            <Notice tone="warn" onClose={() => store?.dismissOverflow()}>
-              {t.notices.overflow(snapshot.overflow, LIMITS.maxFiles)}
-            </Notice>
-          )}
-          {capabilities.lowMemory && items.length > 100 && destination === 'zip' && (
-            <Notice tone="warn">{t.notices.lowMemory}</Notice>
-          )}
-        </div>
+        <Step n={2} title={t.steps.format} current={current}>
+          <div className="space-y-3">
+            <FormatPicker
+              value={options.format}
+              onChange={(format) => setOptions({ ...options, format })}
+              webpSupported={capabilities.webp}
+              disabled={running}
+            />
+            <AdvancedOptions
+              options={options}
+              onChange={setOptions}
+              folderSupported={capabilities.folder}
+              destination={destination}
+              onDestinationChange={setDestination}
+              disabled={running}
+            />
+          </div>
+        </Step>
 
-        <aside className="space-y-5 lg:sticky lg:top-20 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
-          <h3 className="text-muted text-sm font-semibold tracking-wide uppercase">
-            {t.options.title}
-          </h3>
-          <OptionsPanel
-            options={options}
-            onChange={updateOptions}
-            webpSupported={capabilities.webp}
-            folderSupported={capabilities.folder}
-            destination={destination}
-            onDestinationChange={setDestination}
-            disabled={running}
-          />
-          {!running && pending > 0 && (
-            <button
-              type="button"
-              className="btn-primary w-full"
-              onClick={() => void start(false)}
-              data-testid="convert"
-            >
-              {t.actions.convert(pending)}
-            </button>
-          )}
-          {!running && pending === 0 && hasFinished && convertible > 0 && (
-            <button type="button" className="btn-secondary w-full" onClick={() => void start(true)}>
-              <Icon name="retry" className="size-4" />
-              {t.actions.reconvert}
-            </button>
-          )}
-          <p className="text-muted flex items-center gap-2 text-xs">
-            <Icon name="lock" className="size-4 shrink-0" />
-            {t.notices.privacy}
-          </p>
-        </aside>
+        <Step n={3} title={t.steps.download} current={current} last>
+          <div className="space-y-4">
+            {!running && (pending > 0 || items.length === 0) && (
+              <button
+                type="button"
+                className={`${pending > 0 ? 'btn-primary' : 'btn-secondary'} w-full text-base`}
+                onClick={() => void start(false)}
+                disabled={pending === 0}
+                data-testid="convert"
+              >
+                {pending > 0
+                  ? t.actions.convert(pending, FORMAT_LABEL[options.format])
+                  : t.actions.convertEmpty}
+                {pending > 0 && <Icon name="arrow" className="size-4" />}
+              </button>
+            )}
+            {!running && pending === 0 && hasFinished && convertible > 0 && (
+              <button
+                type="button"
+                className="btn-secondary w-full"
+                onClick={() => void start(true)}
+              >
+                <Icon name="retry" className="size-4" />
+                {t.actions.reconvert}
+              </button>
+            )}
 
-        <div className="min-w-0 space-y-4 lg:col-start-1">
-          <ProgressPanel snapshot={snapshot} />
-          <DownloadPanel snapshot={snapshot} />
+            <ProgressPanel snapshot={snapshot} />
+            <DownloadPanel snapshot={snapshot} />
 
-          {items.length > 0 && (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between px-1">
-                <h3 className="text-sm font-medium">{t.list.title(items.length)}</h3>
-                {!running && (
-                  <button
-                    type="button"
-                    className="btn-ghost text-sm"
-                    onClick={() => store?.clear()}
-                  >
-                    <Icon name="trash" className="size-4" />
-                    {t.actions.clear}
-                  </button>
-                )}
+            {items.length > 0 && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between px-1">
+                  <h3 className="text-sm font-medium">{t.list.title(items.length)}</h3>
+                  {!running && (
+                    <button
+                      type="button"
+                      className="btn-ghost text-sm"
+                      onClick={() => store?.clear()}
+                    >
+                      <Icon name="trash" className="size-4" />
+                      {t.actions.clear}
+                    </button>
+                  )}
+                </div>
+                <FileList items={items} />
               </div>
-              <FileList items={items} />
-            </div>
-          )}
-        </div>
-      </div>
+            )}
+
+            <p className="flex items-center gap-2 text-xs text-muted">
+              <Icon name="lock" className="size-4 shrink-0" />
+              {t.notices.privacy}
+            </p>
+          </div>
+        </Step>
+      </ol>
     </section>
   );
 }
 
-function Notice({
-  tone,
+/** Une étape du parcours : pastille numérotée, fil vertical, titre et contenu. */
+function Step({
+  n,
+  title,
+  current,
+  last = false,
   children,
-  onClose,
 }: {
-  tone: 'warn';
+  n: 1 | 2 | 3;
+  title: string;
+  current: 1 | 2 | 3;
+  last?: boolean;
   children: ReactNode;
-  onClose?: () => void;
 }) {
+  const done = n < current;
+  const active = n === current;
+  return (
+    <li
+      className="relative grid grid-cols-[2rem_minmax(0,1fr)] gap-x-3 sm:gap-x-4"
+      aria-current={active ? 'step' : undefined}
+    >
+      <div className="flex flex-col items-center">
+        <span
+          className={`relative z-10 inline-flex size-8 items-center justify-center rounded-full text-sm font-semibold tabular-nums transition-colors duration-200 ${
+            done || active ? 'bg-accent text-on-accent' : 'border border-line bg-surface text-muted'
+          }`}
+        >
+          {done ? <Icon name="check" className="size-4" /> : n}
+        </span>
+        {!last && (
+          <span aria-hidden="true" className={`w-px flex-1 ${done ? 'bg-accent/50' : 'bg-line'}`} />
+        )}
+      </div>
+      <div className={`min-w-0 ${last ? '' : 'pb-7'}`}>
+        <h2
+          className={`flex h-8 items-center text-base font-semibold tracking-tight ${active || done ? '' : 'text-muted'}`}
+        >
+          {title}
+        </h2>
+        <div className="mt-3">{children}</div>
+      </div>
+    </li>
+  );
+}
+
+function Notice({ children, onClose }: { children: ReactNode; onClose?: () => void }) {
   const t = useT();
   return (
     <div
       role="status"
-      className={`animate-fade-in flex items-start gap-3 rounded-2xl border p-3 text-sm ${
-        tone === 'warn' ? 'border-warn/30 bg-warn/10' : ''
-      }`}
+      className="animate-fade-in flex items-start gap-3 rounded-2xl border border-warn/30 bg-warn/10 p-3 text-sm"
     >
-      <Icon name="alert" className="text-warn mt-0.5 size-4 shrink-0" />
+      <Icon name="alert" className="mt-0.5 size-4 shrink-0 text-warn" />
       <p className="flex-1">{children}</p>
       {onClose && (
         <button

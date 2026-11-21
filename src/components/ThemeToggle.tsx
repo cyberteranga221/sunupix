@@ -37,7 +37,7 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggle}
-      className="text-muted hover:bg-surface-2 hover:text-fg inline-flex size-10 items-center justify-center rounded-full transition"
+      className="inline-flex size-10 items-center justify-center rounded-full text-muted transition hover:bg-surface-2 hover:text-fg"
       aria-label={label}
       title={label}
     >

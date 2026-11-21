@@ -46,7 +46,7 @@ test('convertit HEIC, PNG et JPEG en JPG et gère les erreurs', async ({ page })
   await expect(list).toContainText('sample (2).jpg');
 
   const downloadPromise = page.waitForEvent('download');
-  await panel.getByRole('button', { name: 'Tout télécharger en ZIP' }).click();
+  await panel.getByRole('button', { name: 'Télécharger le ZIP' }).click();
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toMatch(/^sunupix-\d{4}-\d{2}-\d{2}\.zip$/);
   const zip = await readFile((await download.path())!);
@@ -57,6 +57,16 @@ test('convertit HEIC, PNG et JPEG en JPG et gère les erreurs', async ({ page })
     'sample.jpg',
   ]);
   expect(errors).toEqual([]);
+});
+
+test('le format choisi apparaît dans le bouton et est appliqué', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('file-input').setInputFiles([fixture('sample.heic')]);
+  await expect(page.getByTestId('convert')).toHaveText(/Convertir la photo en JPG/);
+  await page.getByRole('radio', { name: /PNG/ }).check({ force: true });
+  await expect(page.getByTestId('convert')).toHaveText(/Convertir la photo en PNG/);
+  await page.getByTestId('convert').click();
+  await expect(page.getByTestId('file-list')).toContainText('sample.png');
 });
 
 test('supprime toutes les métadonnées par défaut', async ({ page }) => {
@@ -93,6 +103,7 @@ test('respecte l’orientation EXIF et la taille demandée', async ({ page }) =>
 
 test('conserve les métadonnées sans le GPS quand on le demande', async ({ page }) => {
   await page.goto('/');
+  await page.getByText('Réglages avancés').click();
   await page.getByText('Garder, sauf la position GPS').click();
   await page.getByTestId('file-input').setInputFiles([fixture('sample.heic')]);
   await page.getByTestId('convert').click();
@@ -109,6 +120,7 @@ test('conserve les métadonnées sans le GPS quand on le demande', async ({ page
 
   // Le choix est mémorisé pour la prochaine visite.
   await page.reload();
+  await page.getByText('Réglages avancés').click();
   await expect(page.getByLabel('Garder, sauf la position GPS')).toBeChecked();
 });
 
@@ -142,7 +154,8 @@ test('enregistre directement dans un dossier (File System Access)', async ({ pag
     };
   });
   await page.goto('/');
-  await page.getByText('Directement dans un dossier').click();
+  await page.getByText('Réglages avancés').click();
+  await page.getByText('Directement dans un dossier', { exact: true }).click();
   await page
     .getByTestId('file-input')
     .setInputFiles([fixture('sample.heic'), fixture('sample.png')]);

@@ -24,18 +24,21 @@ export const fr = {
     switchLanguageLabel: 'Switch to English',
   },
   hero: {
-    title: 'Convertis tes photos iPhone en JPG ou PNG',
+    title: 'Convertis tes photos iPhone en JPG ou PNG.',
     subtitle:
-      'Gratuit, sans inscription et sans upload : tes photos restent sur ton appareil. Jusqu’à 400 photos d’un coup.',
-    badgePrivate: '100 % privé',
-    badgeFree: 'Gratuit',
-    badgeOffline: 'Marche hors ligne',
+      'Gratuit, sans upload. Jusqu’à 400 photos d’un coup, converties directement dans ton navigateur : elles ne quittent jamais ton appareil.',
+    sampleName: 'IMG_4821',
+    facts: [
+      'Aucune photo envoyée sur Internet',
+      'Jusqu’à 400 photos par lot',
+      'Gratuit, sans compte ni filigrane',
+    ],
   },
   steps: {
     label: 'Étapes',
-    choose: 'Choisis tes photos',
-    format: 'Choisis le format',
-    download: 'Télécharge',
+    choose: 'Tes photos',
+    format: 'Format de sortie',
+    download: 'Convertis et télécharge',
   },
   dropzone: {
     title: 'Glisse tes photos ici',
@@ -51,10 +54,18 @@ export const fr = {
   options: {
     title: 'Réglages',
     format: 'Format de sortie',
-    formatJpegHint: 'Le plus compatible, fichiers légers',
-    formatPngHint: 'Sans perte, fichiers lourds',
-    formatWebpHint: 'Moderne et léger',
-    webpUnsupported: 'Ton navigateur ne sait pas créer de WebP (Safari). Choisis JPG ou PNG.',
+    formatJpegHint: 'Compatible partout',
+    formatPngHint: 'Sans perte, plus lourd',
+    formatWebpHint: 'Léger, pour le web',
+    recommended: 'Recommandé',
+    advanced: 'Réglages avancés',
+    summaryQuality: (n: number) => `Qualité ${n} %`,
+    summaryMetadata: {
+      strip: 'métadonnées supprimées',
+      'keep-no-gps': 'métadonnées sans GPS',
+      keep: 'toutes les métadonnées',
+    },
+    webpUnsupported: 'Non disponible sur Safari',
     quality: 'Qualité',
     qualityHint: 'Entre 80 et 92 %, la différence est invisible et le fichier plus léger.',
     resize: 'Taille',
@@ -78,7 +89,9 @@ export const fr = {
     destinationFolderHint: 'Chaque photo est écrite dès qu’elle est prête. Idéal pour 400 photos.',
   },
   actions: {
-    convert: (n: number) => (n > 1 ? `Convertir ${n} photos` : 'Convertir la photo'),
+    convert: (n: number, format: string) =>
+      n > 1 ? `Convertir ${n} photos en ${format}` : `Convertir la photo en ${format}`,
+    convertEmpty: 'Ajoute des photos pour commencer',
     reconvert: 'Reconvertir avec ces réglages',
     pause: 'Pause',
     resume: 'Reprendre',
@@ -88,7 +101,7 @@ export const fr = {
     remove: 'Retirer',
     cancel: 'Annuler',
     download: 'Télécharger',
-    downloadAll: 'Tout télécharger en ZIP',
+    downloadAll: 'Télécharger le ZIP',
     downloadPart: (i: number, total: number) => `ZIP ${i} sur ${total}`,
     preparingZip: 'Préparation du ZIP…',
   },
@@ -144,6 +157,55 @@ export const fr = {
     lowMemory:
       'Ton appareil semble limité en mémoire. Pour un gros lot, convertis par paquets de 100 photos et télécharge au fur et à mesure.',
     privacy: 'Tes photos ne quittent jamais ton appareil.',
+  },
+  home: {
+    howTitle: 'Comment ça marche',
+    how: [
+      {
+        title: 'Ajoute tes photos',
+        text: 'Glisse un dossier entier depuis ton ordinateur, ou choisis tes photos dans la galerie de ton téléphone.',
+      },
+      {
+        title: 'Choisis le format',
+        text: 'JPG pour partager partout, PNG pour garder chaque pixel. Tes réglages sont mémorisés pour la prochaine fois.',
+      },
+      {
+        title: 'Télécharge',
+        text: 'Un ZIP pour tout récupérer d’un coup, découpé automatiquement pour les gros lots. Sur Chrome et Edge, enregistre directement dans un dossier.',
+      },
+    ],
+    privacyTitle: 'Tes photos restent chez toi',
+    privacyText:
+      'La plupart des convertisseurs en ligne envoient tes photos sur leurs serveurs. SunuPix fait tout le travail dans ton navigateur, sur ton propre appareil. Personne d’autre ne voit tes images.',
+    privacyPoints: [
+      'Conversion locale, sans serveur ni stockage en ligne',
+      'Position GPS et autres métadonnées supprimées par défaut',
+      'Code source ouvert et vérifiable par tous',
+    ],
+    faqTitle: 'Questions fréquentes',
+    faq: [
+      {
+        q: 'Qu’est-ce qu’un fichier HEIC ?',
+        a: 'C’est le format photo par défaut des iPhone. Il prend moins de place que le JPG, mais beaucoup d’ordinateurs, de sites et d’applications ne savent pas l’ouvrir. SunuPix le convertit en JPG ou PNG, lisibles partout.',
+      },
+      {
+        q: 'Est-ce vraiment gratuit ?',
+        a: 'Oui. Pas de compte, pas de limite cachée, pas de filigrane. SunuPix est un logiciel libre sous licence MIT.',
+      },
+      {
+        q: 'La qualité de mes photos est-elle conservée ?',
+        a: 'Oui. À 90 % de qualité en JPG, la différence avec l’original est invisible à l’œil nu. Choisis PNG si tu veux une conversion sans aucune perte.',
+      },
+      {
+        q: 'Ça marche sur téléphone ?',
+        a: 'Oui, sur iPhone comme sur Android. Sur iPhone, les très grandes photos (48 Mpx) sont réduites automatiquement à environ 16 Mpx, car Safari limite la taille des images qu’il peut traiter.',
+      },
+    ],
+  },
+  footer: {
+    tagline:
+      'Convertisseur d’images libre et gratuit, pensé pour le Sénégal et l’Afrique de l’Ouest.',
+    license: 'Code source ouvert · licence MIT',
   },
   units: {
     bytes: ['o', 'Ko', 'Mo', 'Go'],

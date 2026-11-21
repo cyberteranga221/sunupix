@@ -52,3 +52,39 @@ export function saveOptions(options: ConvertOptions): void {
     /* navigation privée ou stockage plein : sans importance */
   }
 }
+
+// --- Réglages partagés (accroche + convertisseur) ------------------------------------------
+
+/** Le navigateur sait-il encoder du WebP ? (Safari : non.) */
+export function canEncodeWebp(): boolean {
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = 1;
+    return canvas.toDataURL('image/webp').startsWith('data:image/webp');
+  } catch {
+    return false;
+  }
+}
+
+let current: ConvertOptions | null = null;
+const listeners = new Set<() => void>();
+
+/** Réglages courants (chargés une fois depuis le stockage local, côté navigateur). */
+export function getOptions(): ConvertOptions {
+  if (current === null) {
+    const saved = loadOptions();
+    current = saved.format === 'webp' && !canEncodeWebp() ? { ...saved, format: 'jpeg' } : saved;
+  }
+  return current;
+}
+
+export function setOptions(next: ConvertOptions): void {
+  current = next;
+  saveOptions(next);
+  for (const listener of listeners) listener();
+}
+
+export function subscribeOptions(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}

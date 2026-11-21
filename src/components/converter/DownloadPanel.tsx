@@ -51,22 +51,22 @@ export function DownloadPanel({ snapshot }: { snapshot: BatchSnapshot }) {
 
   return (
     <div
-      className="animate-fade-in border-accent/30 bg-accent/5 space-y-3 rounded-2xl border p-4"
+      className="animate-fade-in space-y-3 rounded-2xl border border-accent/30 bg-accent/5 p-4"
       data-testid="download-panel"
     >
       <p className="flex items-center gap-2 font-medium" role="status">
-        <span className="bg-accent text-on-accent inline-flex size-6 items-center justify-center rounded-full">
+        <span className="inline-flex size-6 items-center justify-center rounded-full bg-accent text-on-accent">
           <Icon name="check" className="size-4" />
         </span>
         {t.progress.finished(ok, failed)}
       </p>
       {saved > 0 && snapshot.destination && (
-        <p className="text-muted text-sm">{t.progress.savedTo(snapshot.destination)}</p>
+        <p className="text-sm text-muted">{t.progress.savedTo(snapshot.destination)}</p>
       )}
       {single && (
         <button
           type="button"
-          className="btn-primary"
+          className="btn-primary w-full sm:w-auto"
           onClick={() => downloadBlob(single.blob, single.name)}
         >
           <Icon name="download" />
@@ -76,7 +76,7 @@ export function DownloadPanel({ snapshot }: { snapshot: BatchSnapshot }) {
       {!single && batches.length === 1 && (
         <button
           type="button"
-          className="btn-primary"
+          className="btn-primary w-full sm:w-auto"
           disabled={busy !== null}
           onClick={() => void download(0)}
         >
