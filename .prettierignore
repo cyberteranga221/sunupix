@@ -1,0 +1,8 @@
+.claude/
+dist/
+dist-ssr/
+coverage/
+playwright-report/
+test-results/
+pnpm-lock.yaml
+skills-lock.json
