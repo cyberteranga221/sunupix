@@ -1,16 +1,32 @@
+import { useEffect } from 'react';
 import { Route, Routes } from 'react-router';
+import { startAnalytics } from './analytics';
 import { Layout } from './components/Layout';
-import { I18nProvider } from './i18n';
-import { routes } from './routes';
+import { I18nProvider, useT } from './i18n';
+import { routes, type AppRoute } from './routes';
+import { applyHead } from './seo/head';
+
+/** Une page + la mise à jour du <head> (titre, description…) lors des navigations. */
+function RouteView({ route }: { route: AppRoute }) {
+  const t = useT();
+  useEffect(() => {
+    applyHead(route.meta(t));
+    window.scrollTo(0, 0);
+  }, [route, t]);
+  return <route.Component />;
+}
 
 /** Racine de l'application, partagée par le rendu client et le pré-rendu. */
 export function App() {
+  useEffect(() => {
+    void startAnalytics();
+  }, []);
   return (
     <I18nProvider>
       <Layout>
         <Routes>
-          {routes.map(({ path, Component }) => (
-            <Route key={path} path={path} element={<Component />} />
+          {routes.map((route) => (
+            <Route key={route.path} path={route.path} element={<RouteView route={route} />} />
           ))}
         </Routes>
       </Layout>

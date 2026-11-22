@@ -2,13 +2,30 @@ import { StrictMode } from 'react';
 import { prerender } from 'react-dom/static';
 import { StaticRouter } from 'react-router';
 import { App } from './App';
+import { APP } from './config';
+import { fr } from './i18n/fr';
 import { routes } from './routes';
+import { renderHead } from './seo/head';
 
-/** Chemins à pré-rendre au build (utilisé par scripts/prerender.mjs). */
-export const paths = routes.map((r) => r.path);
+/** Pages à pré-rendre au build (utilisé par scripts/prerender.mjs). « * » devient 404.html. */
+export const pages = routes.map((route) => ({
+  path: route.path,
+  sitemap: route.sitemap,
+  file:
+    route.path === '*'
+      ? '404.html'
+      : route.path === '/'
+        ? 'index.html'
+        : `${route.path.slice(1)}/index.html`,
+}));
 
-/** Rend une page en HTML statique. `prerender` attend la fin de tous les Suspense. */
-export async function render(url: string): Promise<string> {
+export const siteUrl = APP.siteUrl;
+
+/** Rend une page en HTML statique (en français), avec ses balises <head>. */
+export async function render(path: string): Promise<{ html: string; head: string }> {
+  const route = routes.find((r) => r.path === path);
+  if (!route) throw new Error(`route inconnue : ${path}`);
+  const url = path === '*' ? '/404' : path;
   const { prelude } = await prerender(
     <StrictMode>
       <StaticRouter location={url}>
@@ -16,5 +33,5 @@ export async function render(url: string): Promise<string> {
       </StaticRouter>
     </StrictMode>,
   );
-  return new Response(prelude).text();
+  return { html: await new Response(prelude).text(), head: renderHead(route.meta(fr)) };
 }
