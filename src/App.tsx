@@ -11,8 +11,11 @@ function RouteView({ route }: { route: AppRoute }) {
   const t = useT();
   useEffect(() => {
     applyHead(route.meta(t));
-    window.scrollTo(0, 0);
   }, [route, t]);
+  // Nouvelle page : retour en haut (mais pas lors d'un simple changement de langue).
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [route]);
   return <route.Component />;
 }
 
