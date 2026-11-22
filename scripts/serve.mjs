@@ -7,6 +7,7 @@
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize, resolve } from 'node:path';
+import { brotliCompressSync, constants } from 'node:zlib';
 
 const root = resolve(import.meta.dirname, '..');
 const dist = join(root, 'dist');
@@ -54,10 +55,17 @@ createServer(async (req, res) => {
     file = join(dist, '404.html');
     status = 404;
   }
-  const body = await readFile(file);
-  res.writeHead(status, {
+  let body = await readFile(file);
+  const headers = {
     'Content-Type': TYPES[extname(file)] ?? 'application/octet-stream',
     ...headersFor(pathname),
-  });
+  };
+  // Compression Brotli, comme Vercel (sauf images déjà compressées).
+  if (/\bbr\b/.test(req.headers['accept-encoding'] ?? '') && extname(file) !== '.png') {
+    body = brotliCompressSync(body, { params: { [constants.BROTLI_PARAM_QUALITY]: 9 } });
+    headers['Content-Encoding'] = 'br';
+    headers['Vary'] = 'Accept-Encoding';
+  }
+  res.writeHead(status, headers);
   res.end(body);
 }).listen(port, () => console.log(`SunuPix (dist) : http://localhost:${port}`));

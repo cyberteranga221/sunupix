@@ -50,7 +50,8 @@ export function Layout({ children }: { children: ReactNode }) {
             type="button"
             onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
             className="inline-flex h-10 items-center rounded-full px-3 font-mono text-sm font-medium text-muted transition hover:bg-surface-2 hover:text-fg"
-            aria-label={t.nav.switchLanguageLabel}
+            aria-label={`${lang === 'fr' ? 'EN' : 'FR'} – ${t.nav.switchLanguage}`}
+            title={t.nav.switchLanguageLabel}
             lang={lang === 'fr' ? 'en' : 'fr'}
           >
             {lang === 'fr' ? 'EN' : 'FR'}
