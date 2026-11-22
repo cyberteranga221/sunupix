@@ -19,7 +19,7 @@ export const APP: {
   siteUrl: 'https://sunupix.vercel.app',
   repoUrl: 'https://github.com/cyberteranga221/sunupix',
   /** Adresse de contact affichée sur la page Contact (laisser vide pour ne pas en afficher). */
-  contactEmail: '',
+  contactEmail: 'cyberteranga221@gmail.com',
   /** Crédit affiché en bas de chaque page. */
   author: 'Le Concepteur 221',
   /** Lien du crédit (site, portfolio, Instagram…). Vide = pas de lien. */
@@ -86,7 +86,7 @@ export const FEATURES: {
    * Statistiques Vercel Web Analytics (sans cookie). L'utilisateur peut les refuser.
    * Pour les activer : passer à true ET activer « Web Analytics » dans le tableau de bord Vercel.
    */
-  analytics: false,
+  analytics: true,
   /** Emplacements publicitaires (AdSense). Nécessite un plan Vercel payant. */
   ads: false,
   /** Identifiant AdSense, ex. « ca-pub-1234567890 ». */

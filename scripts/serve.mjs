@@ -1,7 +1,8 @@
 /**
  * Petit serveur statique qui imite Vercel pour tester le site construit (dist/) :
  *  - /faq → dist/faq/index.html, page inconnue → dist/404.html (statut 404) ;
- *  - applique les en-têtes de vercel.json (CSP, cache…), pour tester la sécurité en local.
+ *  - applique les en-têtes de vercel.json (CSP, cache…), pour tester la sécurité en local ;
+ *  - simule le script des statistiques Vercel (/_vercel/insights/script.js).
  * Usage : node scripts/serve.mjs [port]   (par défaut 4173)
  */
 import { createServer } from 'node:http';
@@ -47,6 +48,15 @@ async function isFile(path) {
 
 createServer(async (req, res) => {
   const pathname = decodeURIComponent(new URL(req.url ?? '/', 'http://localhost').pathname);
+  // Statistiques Vercel (servies par Vercel en production) : script vide en local.
+  if (pathname.startsWith('/_vercel/insights/')) {
+    res.writeHead(200, {
+      'Content-Type': 'text/javascript; charset=utf-8',
+      ...headersFor(pathname),
+    });
+    res.end(pathname.endsWith('.js') ? '/* Vercel Web Analytics (simulé en local) */' : '');
+    return;
+  }
   const safe = normalize(pathname).replace(/^(\.\.[/\\])+/, '');
   let file = join(dist, safe);
   let status = 200;
