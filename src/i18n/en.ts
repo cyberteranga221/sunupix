@@ -6,7 +6,7 @@ export const en: Dictionary = {
   langName: 'English',
   common: {
     appName: 'SunuPix',
-    slogan: 'Convert your iPhone photos to JPG or PNG. Free, no upload.',
+    slogan: 'Hundreds of photos converted. None uploaded.',
     skipToContent: 'Skip to content',
     close: 'Close',
   },
@@ -23,9 +23,9 @@ export const en: Dictionary = {
     switchLanguageLabel: 'Passer en français',
   },
   hero: {
-    title: 'Convert your iPhone photos to JPG or PNG.',
+    title: 'Hundreds of photos converted. None uploaded.',
     subtitle:
-      'Free, no upload. Up to 400 photos at once, converted right in your browser: they never leave your device.',
+      'Turn HEIC, PNG or WebP photos into JPG or PNG, up to 400 at a time. Free, and everything happens on your device: your images never go online.',
     sampleName: 'IMG_4821',
     facts: [
       'No photo sent over the Internet',

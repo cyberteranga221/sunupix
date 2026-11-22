@@ -7,7 +7,7 @@ export const fr = {
   langName: 'Français',
   common: {
     appName: 'SunuPix',
-    slogan: 'Convertis tes photos iPhone en JPG ou PNG. Gratuit, sans upload.',
+    slogan: 'Des centaines de photos converties. Aucune envoyée.',
     skipToContent: 'Aller au contenu',
     close: 'Fermer',
   },
@@ -24,9 +24,9 @@ export const fr = {
     switchLanguageLabel: 'Switch to English',
   },
   hero: {
-    title: 'Convertis tes photos iPhone en JPG ou PNG.',
+    title: 'Des centaines de photos converties. Aucune envoyée.',
     subtitle:
-      'Gratuit, sans upload. Jusqu’à 400 photos d’un coup, converties directement dans ton navigateur : elles ne quittent jamais ton appareil.',
+      'Passe tes photos HEIC, PNG ou WebP en JPG ou PNG, jusqu’à 400 à la fois. Gratuit, et tout se fait sur ton appareil : tes images ne partent jamais sur Internet.',
     sampleName: 'IMG_4821',
     facts: [
       'Aucune photo envoyée sur Internet',

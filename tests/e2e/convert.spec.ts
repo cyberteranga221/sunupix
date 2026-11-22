@@ -20,7 +20,7 @@ test('convertit HEIC, PNG et JPEG en JPG et gère les erreurs', async ({ page })
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('photos iPhone');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Aucune envoyée');
 
   await page
     .getByTestId('file-input')
