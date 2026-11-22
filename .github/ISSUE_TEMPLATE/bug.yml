@@ -1,0 +1,33 @@
+name: Signaler un problème
+description: Une conversion échoue, un bouton ne marche pas, un texte est faux…
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci ! **N'ajoute jamais de photo personnelle** : décris le type de fichier (HEIC d'iPhone 15, PNG de capture d'écran…).
+        Pour une faille de sécurité, n'utilise pas ce formulaire : voir SECURITY.md.
+  - type: textarea
+    id: description
+    attributes:
+      label: Que s'est-il passé ?
+      description: Ce que tu as fait, ce qui s'est passé, et ce que tu attendais.
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Navigateur et version
+      placeholder: Safari 19 sur iPhone 15, Chrome 142 sur Mac…
+    validations:
+      required: true
+  - type: input
+    id: files
+    attributes:
+      label: Fichiers concernés
+      placeholder: 250 photos HEIC de 3 à 6 Mo, sortie JPG 90 %
+  - type: textarea
+    id: console
+    attributes:
+      label: Message d'erreur affiché (facultatif)
+      render: text

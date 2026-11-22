@@ -404,6 +404,7 @@ export const fr = {
   footer: {
     tagline: 'Convertisseur d’images gratuit, pensé pour le Sénégal et l’Afrique de l’Ouest.',
     license: 'Code source public · usage commercial interdit',
+    thirdParty: 'Licences des composants tiers',
   },
   units: {
     bytes: ['o', 'Ko', 'Mo', 'Go'],

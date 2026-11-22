@@ -78,6 +78,9 @@ export function Layout({ children }: { children: ReactNode }) {
               <Icon name="github" className="size-4" />
               {t.footer.license}
             </a>
+            <a href="/licenses/third-party.txt" className="block text-xs text-muted hover:text-fg">
+              {t.footer.thirdParty}
+            </a>
           </div>
           <nav aria-label={t.nav.converters}>
             <p className="font-medium">{t.nav.converters}</p>

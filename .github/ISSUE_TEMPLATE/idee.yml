@@ -1,0 +1,15 @@
+name: Proposer une idée
+description: Une amélioration, un nouveau format, une page…
+labels: [amélioration]
+body:
+  - type: textarea
+    id: besoin
+    attributes:
+      label: Quel est ton besoin ?
+      description: Le problème que tu rencontres, avant la solution.
+    validations:
+      required: true
+  - type: textarea
+    id: proposition
+    attributes:
+      label: Ce que tu proposes
