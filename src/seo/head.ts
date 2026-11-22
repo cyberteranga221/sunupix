@@ -77,6 +77,7 @@ export function webApplicationLd(name: string, description: string, path: string
     isAccessibleForFree: true,
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'XOF' },
     image: `${APP.siteUrl}/og-image.png`,
+    author: { '@type': 'Person', name: APP.author, url: APP.authorUrl || undefined },
   };
 }
 

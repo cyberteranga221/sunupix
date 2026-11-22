@@ -401,6 +401,7 @@ export const en: Dictionary = {
     tagline: 'Free image converter, designed for Senegal and West Africa.',
     license: 'Public source code · no commercial use',
     thirdParty: 'Third-party licences',
+    madeBy: 'Designed and built by',
   },
   units: {
     bytes: ['B', 'KB', 'MB', 'GB'],

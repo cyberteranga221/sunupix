@@ -70,6 +70,20 @@ export function Layout({ children }: { children: ReactNode }) {
               {APP.name}
             </p>
             <p className="leading-relaxed text-muted">{t.footer.tagline}</p>
+            <p className="text-muted">
+              {t.footer.madeBy}{' '}
+              {APP.authorUrl ? (
+                <a
+                  href={APP.authorUrl}
+                  rel="noopener"
+                  className="font-medium text-fg hover:text-accent"
+                >
+                  {APP.author}
+                </a>
+              ) : (
+                <span className="font-medium text-fg">{APP.author}</span>
+              )}
+            </p>
             <a
               href={APP.repoUrl}
               rel="noopener"

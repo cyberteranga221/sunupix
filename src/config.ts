@@ -11,6 +11,8 @@ export const APP: {
   siteUrl: string;
   repoUrl: string;
   contactEmail: string;
+  author: string;
+  authorUrl: string;
 } = {
   name: 'SunuPix',
   /** URL publique de production (sans barre oblique finale), utilisée pour le SEO. */
@@ -18,6 +20,10 @@ export const APP: {
   repoUrl: 'https://github.com/cyberteranga221/sunupix',
   /** Adresse de contact affichée sur la page Contact (laisser vide pour ne pas en afficher). */
   contactEmail: '',
+  /** Crédit affiché en bas de chaque page. */
+  author: 'Le Concepteur 221',
+  /** Lien du crédit (site, portfolio, Instagram…). Vide = pas de lien. */
+  authorUrl: 'https://github.com/cyberteranga221',
 };
 
 /** Limites du mode gros volume. */

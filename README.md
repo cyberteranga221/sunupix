@@ -114,6 +114,10 @@ Les contributions sont les bienvenues : lis [`CONTRIBUTING.md`](CONTRIBUTING.md)
 [code de conduite](CODE_OF_CONDUCT.md). Pour une faille de sécurité, suis
 [`SECURITY.md`](SECURITY.md).
 
+## Auteur
+
+Conçu et développé par **Le Concepteur 221** ([@cyberteranga221](https://github.com/cyberteranga221)).
+
 ## Licence
 
 Le code est **public** et sous licence [**PolyForm Noncommercial 1.0.0**](LICENSE) : tu peux le
