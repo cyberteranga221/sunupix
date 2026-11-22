@@ -29,7 +29,7 @@ export const fr = {
       'Passe tes photos HEIC, PNG ou WebP en JPG ou PNG, jusqu’à 400 à la fois. Gratuit, et tout se fait sur ton appareil : tes images ne partent jamais sur Internet.',
     sampleName: 'IMG_4821',
     facts: [
-      'Aucune photo envoyée sur Internet',
+      'Qualité et orientation préservées',
       'Jusqu’à 400 photos par lot',
       'Gratuit, sans compte ni filigrane',
     ],

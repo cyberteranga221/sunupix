@@ -28,7 +28,7 @@ export const en: Dictionary = {
       'Turn HEIC, PNG or WebP photos into JPG or PNG, up to 400 at a time. Free, and everything happens on your device: your images never go online.',
     sampleName: 'IMG_4821',
     facts: [
-      'No photo sent over the Internet',
+      'Quality and orientation preserved',
       'Up to 400 photos per batch',
       'Free, no account, no watermark',
     ],
