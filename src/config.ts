@@ -6,13 +6,19 @@
  * `src/styles.css` (bloc `@theme`).
  */
 
-export const APP = {
+export const APP: {
+  name: string;
+  siteUrl: string;
+  repoUrl: string;
+  contactEmail: string;
+} = {
   name: 'SunuPix',
   /** URL publique de production (sans barre oblique finale), utilisée pour le SEO. */
   siteUrl: 'https://sunupix.vercel.app',
   repoUrl: 'https://github.com/cyberteranga221/sunupix',
-  contactEmail: 'contact@sunupix.app',
-} as const;
+  /** Adresse de contact affichée sur la page Contact (laisser vide pour ne pas en afficher). */
+  contactEmail: '',
+};
 
 /** Limites du mode gros volume. */
 export const LIMITS = {
@@ -63,13 +69,24 @@ export const RESIZE_PRESETS = {
 } as const;
 
 /** Options activables. Tout ce qui touche à l'argent est DÉSACTIVÉ par défaut. */
-export const FEATURES = {
-  /** Statistiques Vercel Web Analytics (sans cookies). L'utilisateur peut les refuser. */
-  analytics: true,
+export const FEATURES: {
+  analytics: boolean;
+  ads: boolean;
+  adsenseClientId: string;
+  donate: boolean;
+  donateUrl: string;
+} = {
+  /**
+   * Statistiques Vercel Web Analytics (sans cookie). L'utilisateur peut les refuser.
+   * Pour les activer : passer à true ET activer « Web Analytics » dans le tableau de bord Vercel.
+   */
+  analytics: false,
   /** Emplacements publicitaires (AdSense). Nécessite un plan Vercel payant. */
   ads: false,
+  /** Identifiant AdSense, ex. « ca-pub-1234567890 ». */
   adsenseClientId: '',
   /** Bouton de don. */
   donate: false,
+  /** Lien de don (Wave, Orange Money, PayPal…). */
   donateUrl: '',
-} as const;
+};

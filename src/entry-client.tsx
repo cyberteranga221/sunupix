@@ -17,3 +17,10 @@ const app = (
 // Page pré-rendue : on « hydrate » le HTML existant. Sinon (mode dev) : rendu classique.
 if (container.firstElementChild) hydrateRoot(container, app);
 else createRoot(container).render(app);
+
+// Mode hors ligne : le service worker est généré au build (scripts/prerender.mjs).
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    void navigator.serviceWorker.register('/sw.js').catch(() => undefined);
+  });
+}
