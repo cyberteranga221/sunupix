@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Convertisseur d'images gratuit, rapide et privé : HEIC/HEIF vers JPEG, PNG ou WebP, 100 % dans le navigateur.",
-  "license": "MIT",
+  "license": "PolyForm-Noncommercial-1.0.0",
   "type": "module",
   "packageManager": "pnpm@10.34.9",
   "engines": {

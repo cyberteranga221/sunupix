@@ -180,7 +180,7 @@ export const fr = {
     privacyPoints: [
       'Conversion locale, sans serveur ni stockage en ligne',
       'Position GPS et autres métadonnées supprimées par défaut',
-      'Code source ouvert et vérifiable par tous',
+      'Code source public et vérifiable par tous',
     ],
     faqTitle: 'Questions fréquentes',
     faq: [
@@ -190,7 +190,7 @@ export const fr = {
       },
       {
         q: 'Est-ce vraiment gratuit ?',
-        a: 'Oui. Pas de compte, pas de limite cachée, pas de filigrane. SunuPix est un logiciel libre sous licence MIT.',
+        a: 'Oui. Pas de compte, pas de limite cachée, pas de filigrane. Son code source est public et peut être vérifié par tous.',
       },
       {
         q: 'La qualité de mes photos est-elle conservée ?',
@@ -203,9 +203,8 @@ export const fr = {
     ],
   },
   footer: {
-    tagline:
-      'Convertisseur d’images libre et gratuit, pensé pour le Sénégal et l’Afrique de l’Ouest.',
-    license: 'Code source ouvert · licence MIT',
+    tagline: 'Convertisseur d’images gratuit, pensé pour le Sénégal et l’Afrique de l’Ouest.',
+    license: 'Code source public · usage commercial interdit',
   },
   units: {
     bytes: ['o', 'Ko', 'Mo', 'Go'],

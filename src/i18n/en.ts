@@ -177,7 +177,7 @@ export const en: Dictionary = {
     privacyPoints: [
       'Local conversion, no server, no online storage',
       'GPS location and other metadata removed by default',
-      'Open source code anyone can check',
+      'Public source code anyone can check',
     ],
     faqTitle: 'Frequently asked questions',
     faq: [
@@ -187,7 +187,7 @@ export const en: Dictionary = {
       },
       {
         q: 'Is it really free?',
-        a: 'Yes. No account, no hidden limit, no watermark. SunuPix is free software under the MIT licence.',
+        a: 'Yes. No account, no hidden limit, no watermark. Its source code is public and anyone can check it.',
       },
       {
         q: 'Is my photo quality preserved?',
@@ -200,8 +200,8 @@ export const en: Dictionary = {
     ],
   },
   footer: {
-    tagline: 'Free and open image converter, designed for Senegal and West Africa.',
-    license: 'Open source · MIT licence',
+    tagline: 'Free image converter, designed for Senegal and West Africa.',
+    license: 'Public source code · no commercial use',
   },
   units: {
     bytes: ['B', 'KB', 'MB', 'GB'],
